@@ -1,0 +1,78 @@
+{% extends "../layouts/companyBase.twig" %}
+
+{% block style %}
+	<link rel="stylesheet" href="/assets/css/style.css">
+{% endblock %}
+
+{% block main %}
+	<div>
+		<h1>{{ company.name }}</h1>
+	</div>
+
+	<section>
+		<h2>Agenda</h2>
+
+		<!-- Sélecteur d'employé -->
+		<div>
+			<label for="employeeSelect">Sélectionnez un employé :</label>
+			<select id="employeeSelect" name="employeeId" onchange="fetchEmployeeTasks()">
+				<option value="">-- Sélectionnez un employé --</option>
+				{% for employee in company.employes %}
+					<option value="{{ employee.id }}">{{ employee.firstname }}
+						{{ employee.lastname }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="agendaContainer">
+			<div id="calendar"></div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block script %}
+	{{ parent() }}
+	<!-- Charge les scripts globaux définis dans companyBase.twig -->
+
+	<!-- Script spécifique pour initialiser FullCalendar -->
+		<script>
+document.addEventListener('DOMContentLoaded', function () {
+const calendarEl = document.getElementById('calendar');
+const calendar = new FullCalendar.Calendar(calendarEl, {
+initialView: 'dayGridMonth', // Affichage au mois par défaut
+headerToolbar: {
+left: 'prev,next today',
+center: 'title',
+right: 'dayGridMonth,timeGridWeek,timeGridDay'
+},
+// Limiter l'affichage à 31 jours dans le mois
+dayMaxEvents: true,
+// Configuration pour les vues semaine et jour
+slotMinTime: '08:00:00', // Heure de début
+slotMaxTime: '19:00:00', // Heure de fin
+events: [] // Démarre avec un tableau vide, les événements seront chargés via fetch
+});
+calendar.render();
+
+// Fonction pour récupérer les tâches de l'employé sélectionné
+window.fetchEmployeeTasks = async function () {
+const employeeId = document.getElementById('employeeSelect').value;
+if (employeeId) {
+const response = await fetch (`/tasks/${employeeId}`);
+const tasks = await response.json();
+
+// Transformez les tâches pour le calendrier
+const events = tasks.map(task => ({
+title: task.taskTitle, start: task.startDate, // Date ISO-8601
+end: task.endDate // Date ISO-8601
+}));
+
+// Mettre à jour les événements du calendrier
+calendar.removeAllEvents(); // Supprimer les événements précédents
+calendar.addEventSource(events); // Ajouter le nouveau source d'événements
+} else {
+calendar.removeAllEvents(); // Si aucun employé n'est sélectionné, vider le calendrier
+}
+};
+});
+</script>{% endblock %}

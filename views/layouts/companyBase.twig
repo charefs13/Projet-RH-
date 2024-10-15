@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> {% block style %}{% endblock %}
+		<title>
+			{% block title %}My Company
+			{% endblock %}
+		</title>
+
+		<!-- FullCalendar CSS -->
+		<link
+		rel="stylesheet" href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css'>
+
+		<!-- FullCalendar JS -->
+		<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+
+		<!-- Other Global Scripts -->
+		{% block scriptHead %}{% endblock %}
+	</head>
+	<body>
+		{% include "../partials/companyHeader.twig" %}
+		{% block main %}{% endblock %}
+		{% block script %}
+			<script src="/assets/script/script.js"></script>
+			<!-- Fichier JS pour l'interactivité générale -->
+		{% endblock %}
+	</body>
+</html>

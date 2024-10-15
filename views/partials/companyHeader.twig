@@ -1,0 +1,47 @@
+{% if company.id %}
+	<header>
+
+
+		<div class='flex'>
+			<a href="/"><img src="/assets/img/logo.png" alt="logo de l'entreprise"></a>
+
+		</div>
+		<div>
+			<nav>
+				<ul>
+					<li><a href="/agenda">Agenda</a></li>
+
+					<li><a href="/manageEmploye">Add Employes</a></li>
+					<li><a href="/manageComputer">Add Computers</a></li>
+
+				</ul>
+			</nav>
+		</div>
+
+		<div>
+			<a href="/logout"><img class="img" src="/assets/img/logout.png" alt="logo de déconnexion"></a>
+		</div>
+	</header>
+{% else %}
+	<header>
+
+		<div>
+			<div>
+				<a href="/"><img src="/assets/img/logo.png" alt="logo de l'entreprise"></a>
+			</div>
+
+		</div>
+
+		<div>
+			<nav>
+
+				<ul>
+					<li><a href="/register">Sign In</a></li>
+					<li><a href="/login">Login</a></li>
+				</ul>
+			</nav>
+		</div>
+	{% endif %}
+
+
+</header>

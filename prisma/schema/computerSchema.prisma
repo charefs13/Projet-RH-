@@ -1,0 +1,8 @@
+model Computer {
+    id      Int      @id @default(autoincrement())
+    ref     String   @unique
+    employe Employe? 
+
+    companyId Int // id de l'entreprise à laquelle appartien l'ordinateur
+    company   Company @relation(fields: [companyId], references: [id])
+}

@@ -1,0 +1,23 @@
+{
+  "name": "projet-app-monobloc",
+  "version": "1.0.0",
+  "description": "Projet app monobloc",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohamed Saadi",
+  "license": "ISC",
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@prisma/client": "^5.20.0",
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "fullcalendar": "^6.1.15",
+    "prisma": "^5.20.0",
+    "twig": "^1.17.1"
+  }
+}

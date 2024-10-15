@@ -1,0 +1,11 @@
+model Task {
+    id          Int      @id @default(autoincrement())
+    taskTitle   String
+    description String
+    startDate   DateTime
+    endDate     DateTime
+
+    assignedTo Employe[]
+    Company    Company?  @relation(fields: [companyId], references: [id])
+    companyId  Int
+}

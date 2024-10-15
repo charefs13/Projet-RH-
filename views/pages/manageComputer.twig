@@ -1,0 +1,33 @@
+{% extends "../layouts/companyBase.twig" %}
+
+{% block style %}
+	<link rel="stylesheet" href="/assets/css/style.css">
+{% endblock %}
+
+{% block main %}
+	<div>
+		<h1>{{company.name}}</h1>
+	</div>
+
+
+	<section>
+		<h2>Add Computers</h2>
+		<div class='container'>
+
+		<form action="/addComputer" method="POST" class="form">
+			<label for="ref">Reference:</label>
+			<input type="text" id="ref" name="ref">
+
+			<label for="employeId">Assign to Employee (optional):</label>
+
+			<select id="employeId" name="employeId">
+				<option value="">-- Select an employee --</option>
+				{% for employe in employees %}
+					<option value="{{ employe.id }}">{{ employe.firstname }}
+						{{ employe.lastname }}</option>
+				{% endfor %}
+			</select>
+
+			<button type="submit">Add computer</button>
+		</form></section>
+	{% endblock %}

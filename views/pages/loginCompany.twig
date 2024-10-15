@@ -1,0 +1,52 @@
+{# page d'inscription #}
+
+
+{# import de ma base pour company #}
+{% extends "../layouts/companyBase.twig" %}
+
+
+	{% block style %}
+
+<link rel="stylesheet" href="/assets/css/style.css"> {% endblock %}
+
+
+{% block main %}
+
+	<div>
+		<h1>
+			Company-On
+		</h1>
+	</div>
+	<div class="intro"></p>
+	<p>
+		<strong>Company-On</strong>
+		is your perfect
+		<strong>companion</strong>
+		for your
+		<strong>Company</strong>
+		🤝.
+
+	</p>
+	<p>Our mission: to save you time, because every minute counts ⏳ .
+	</p>
+
+	<p>
+		Easily manage your employees and equipment with
+		<strong>Company-On</strong>, and focus on what really matters: growing your business 💵.</p>
+</div>
+<form action="/login" method="POST" class="form">
+	<label for="identifiant">Id</label>
+	<input type="text" id="identifiant" name="identifiant" placeholder="Email or Siret" required>
+
+	{% if error %}
+		<p>{{error.email}}</p>
+	{% endif %}
+
+	<label for="password">Password:</label>
+	<input type="password" id="password" name="password" required>
+	{% if error %}
+		<p>{{error.password}}</p>
+	{% endif %}
+
+	<button>Log In</button>
+</form>{% endblock %}

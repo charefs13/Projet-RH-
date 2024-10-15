@@ -1,0 +1,12 @@
+// Ma compagnie peut avoir plusieurs Employes et plusieurs Ordinateurs
+
+model Company {
+    id        Int        @id @default(autoincrement())
+    name      String
+    email     String     @unique
+    siret     String     @unique
+    password  String
+    employes  Employe[]
+    computers Computer[]
+    tasks Task[]
+}

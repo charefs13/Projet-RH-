@@ -1,0 +1,21 @@
+model Employe {
+    id        Int     @id @default(autoincrement())
+    firstname String
+    lastname  String
+    email     String  @unique
+    password  String
+    age       Int
+    gender    Gender
+
+    companyId Int // id de l'entreprise à laquelle appartien l'employe
+    company   Company @relation(fields: [companyId], references: [id])
+
+    cpuId    Int?      @unique // id du cpu attribué à employé (peut être null) IL EST UNIQUE
+    computer Computer? @relation(fields: [cpuId], references: [id]) // Relation One-to-One avec Computer
+    tasks        Task[]
+}
+
+enum Gender {
+    Mr
+    Ms
+}

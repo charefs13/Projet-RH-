@@ -1,0 +1,208 @@
+{% extends "../layouts/companyBase.twig" %}
+
+{% block style %}
+	<link rel="stylesheet" href="/assets/css/style.css">
+{% endblock %}
+
+{% block main %}
+	<div>
+		<h1>{{company.name}}
+			Welcome</h1>
+	</div>
+
+	<div>
+		<h2>Your Dashboard</h2>
+	</div>
+
+	<p class="openTaskContainer">Add and Send a task to your employees</p>
+
+
+	<div class="taskContainer">
+
+		<p class="closeTaskContainer">Close</p>
+
+		<form action="/sendTask" method="post">
+			<div class="form-group">
+				<label for="taskTitle">Object</label>
+				<input id="taskTitle" name="taskTitle" type="text">
+
+				<label for="task">Task:</label>
+				<textarea name="task" id="task" placeholder="Describe the task"></textarea>
+
+				<div class="dateContainer">
+					<label for="startDate">Start Date</label>
+					<input id="startDate" name="startDate" type="date">
+
+					<label for="endDate">End Date</label>
+					<input id="endDate" name="endDate" type="date">
+				</div>
+
+				<div class="dateContainer">
+					<label for="startTime">From</label>
+					<input type="time" id="startTime" name="startTime" required>
+
+					<label for="endTime">To</label>
+					<input type="time" id="endTime" name="endTime" required>
+				</div>
+
+			
+
+				<!-- Assignation des employés -->
+				<div class="form-group">
+					<label for="employees">Assign to:</label>
+					<div class="select-all-container">
+						<input type="checkbox" id="selectAll" onclick="toggleSelectAll()">
+						<label for="selectAll">Select all employees</label>
+					</div>
+
+					<div class="employee-list">
+						{% for employe in employes %}
+							<div class="employee-checkbox-container">
+								<input type="checkbox" class="employee-checkbox" name="employees[]" value="{{ employe.id }}">
+								<label>{{ employe.firstname }}
+									{{ employe.lastname }}</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<button type="submit" class="submit-btn">Send</button>
+			</div>
+		</form>
+	</div>
+
+
+	<section>
+		<h2>A Preview of your Company 🔎
+		</h2>
+		<div class='container'>
+
+
+			<article>
+				<h3>Employees</h3>
+				<!-- Correction de la fermeture de balise -->
+
+				<div class="employeesContainer">
+					{% for employe in employes %}
+						<div>
+							<p>Firstname:
+								{{ employe.firstname }}</p>
+							<p>LastName:
+								{{ employe.lastname }}</p>
+
+							{% if employe.cpuId %}
+								<p>Computer Id:
+									{{ employe.cpuId }}</p>
+							{% else %}
+								<form action="/assignCputoEmploye/{{ employe.id }}" method="post">
+									<select id="cpuId" name="cpuId">
+										<option value="">-- Select a Computer --</option>
+										{% for freeCpu in freeCpus %}
+											<option value="{{ freeCpu.id }}">{{ freeCpu.ref }}</option>
+										{% endfor %}
+									</select>
+									<button type="submit">Add Computer to
+										{{ employe.firstname }}</button>
+								</form>
+							{% endif %}
+
+							<!-- Formulaire caché pour la mise à jour de l'employé -->
+							<div id="form{{ employe.id }}" class="hidden">
+								<form action="/updateEmployee/{{ employe.id }}" method="post">
+									<label for="firstname">First Name:</label>
+									<input type="text" id="firstname" name="firstname" value="{{ employe.firstname }}"><br>
+
+									<label for="lastname">Last Name:</label>
+									<input type="text" id="lastname" name="lastname" value="{{ employe.lastname }}"><br>
+
+									<label for="email">Email:</label>
+									<input type="email" id="email" name="email" value="{{ employe.email }}"><br>
+
+									<label for="age">Age:</label>
+									<input type="text" id="age" name="age" value="{{ employe.age }}"><br>
+
+									<label for="gender">Gender:</label>
+									<select id="gender" name="gender">
+										<option value="Mr" {% if employe.gender == 'Mr' %} selected {% endif %}>Mr</option>
+										<option value="Ms" {% if employe.gender == 'Ms' %} selected {% endif %}>Ms</option>
+									</select><br>
+
+									{% if employe.cpuId %}
+										<a href="/removeCpu/{{ employe.id }}">Remove Cpu from
+											{{ employe.firstname }}</a><br><br>
+									{% endif %}
+
+									<button class="save" name="name">Save</button>
+								</form>
+							</div>
+
+							<button class="update" data-id="{{ employe.id }}" type="button">Update</button>
+							<form action="/deleteEmployee/{{ employe.id }}" method="post" onsubmit="return confirm('Are you sure?');">
+								<button type="submit">Delete</button>
+							</form>
+						</div>
+					{% endfor %}
+
+				</div>
+
+			</article>
+
+
+			<article>
+				<h3>Computers</h3>
+				<div class="ComputerContainer">
+					{% for computer in computers %}
+						<div>
+							<p>Reference:
+								{{ computer.ref }}</p>
+							<p>CpuId:
+								{{ computer.id }}</p>
+
+							{% if computer.employe %}
+								<p>Employee:
+									{{ computer.employe.firstname }}
+									{{ computer.employe.lastname }}</p>
+							{% else %}
+								<form
+									action="/assignEmployetoCpu/{{ computer.id }}" method="post">
+									<!-- Formulaire pour assigner un employé à un ordinateur -->
+									<select id="employeId" name="employeId">
+										<option value="">-- Select an employee --</option>
+										{% for withoutCpu in withoutCpus %}
+											<option value="{{ withoutCpu.id }}">{{ withoutCpu.firstname }}
+												{{ withoutCpu.lastname }}</option>
+										{% endfor %}
+									</select>
+									<button type="submit">Assign
+										{{ computer.ref }}</button>
+								</form>
+							{% endif %}
+
+							<!-- Formulaire caché pour la mise à jour de l'ordinateur -->
+							<div id="computerForm{{ computer.id }}" class="hidden">
+								<form action="/updateComputer/{{ computer.id }}" method="post">
+									<label for="ref">Reference:</label>
+									<input type="text" id="ref" name="ref" value="{{ computer.ref }}"><br>
+
+									{% if computer.employe %}
+										<a href="/removeEmployeeFromCpu/{{ computer.employe.id }}">Release
+											{{ computer.ref }}</a><br><br>
+									{% endif %}
+
+									<button class="save" name="save">Save</button>
+								</form>
+							</div>
+
+							<button class="update-computer" data-id="{{ computer.id }}" type="button">Update</button>
+
+							<form action="/deleteCpu/{{ computer.id }}" method="post">
+								<button>Delete</button>
+							</form>
+						</div>
+					{% endfor %}
+				</div>
+			</article>
+
+
+		</section>
+	{% endblock %}
